@@ -13,12 +13,3 @@ void Semaphore::wait() {
     }
     --count_;
 }
-
-bool Semaphore::try_wait() {
-    std::unique_lock<std::mutex> lock(mutex_);
-    if(count_) {
-        --count_;
-        return true;
-    }
-    return false;
-}

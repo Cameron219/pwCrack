@@ -10,6 +10,10 @@
 using std::string;
 using std::unordered_map;
 
+/**
+ * Hash SHA256 String, then check and see if it exists within hashes map.
+ * If it does then set the hash as cracked.
+ */
 void SHA256Task::run(Hashes &hashes) {
     string hash = sha256(line_);
 

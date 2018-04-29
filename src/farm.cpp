@@ -29,7 +29,7 @@ void Farm::run(Hashes &hashes) {
                 if(tasks.empty() || hashes.areCracked()){
                     threadsFinished++;
                     tasks_mutex.unlock();
-                    // Hate this, fix it later
+                    // Hate this, fix it later (exit condition for output thread)
                     hashes.write("");
                     return;
                 }
