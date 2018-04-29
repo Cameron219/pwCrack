@@ -9,9 +9,9 @@
  */
 class Semaphore {
 public:
-    // Signal that data is ready
+    // Increment counter
     void signal();
-    // Wait for data to be ready
+    // Decrement counter
     void wait();
 private:
     // Mutex to lock count

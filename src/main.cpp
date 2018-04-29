@@ -30,6 +30,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <unordered_map>
+#include <algorithm>
 
 // Using declarations
 using std::cout;
@@ -52,12 +53,13 @@ const string DEFAULT_HASH_TYPE = "MD5";
  * &file: Input Stream
  * &path: Path to file on disk
  */
-void loadFile(ifstream &file, string &path) {
+bool loadFile(ifstream &file, string &path) {
     file.open(path);
     // If file does not exist, throw an exception
     if(file.fail() || !file.is_open()) {
-        throw std::invalid_argument("Unable to load file: " + path);
+        return false;
     }
+    return true;
 }
 
 /**
@@ -111,6 +113,16 @@ void crackHashes(ifstream &dict, Hashes &hashes, string &type) {
 }
 
 /**
+ * Validate the hash type input
+ */
+bool validateType(string &type) {
+    if(type == "MD5" || type == "SHA1" || type == "SHA256") {
+        return true;
+    }
+    return false;
+}
+
+/**
  * Handles and validates arguments passed
  */
 int main(int argc, char *argv[]) {
@@ -133,15 +145,37 @@ int main(int argc, char *argv[]) {
         // Set the output path within hashes object
         hashes.setOutputPath(output_path);
 
+        // Convert hashType to uppercase
+        std::transform(hashType.begin(), hashType.end(), hashType.begin(), ::toupper);
+
+        // If invalid type soecified, print error message and stop execution
+        if(!validateType(hashType)) {
+            std::cerr << "Invalid Hash Type specified" << endl
+                      << hashType << endl;
+            return 1;
+        }
+
         // Load dictionary file
         cout << "Loading Dictionary: " << dictionary_path << endl;
         ifstream dictionary_file;
-        loadFile(dictionary_file, dictionary_path);
+
+        // If file is not loaded, print error message to user and stop execution
+        if(!loadFile(dictionary_file, dictionary_path)) {
+            std::cerr << "Unable to load dictionary file specified." << endl
+                      << dictionary_path << endl;
+            return 1;
+        }
 
         // Load hashes file
         cout << "Loading Hashes: " << hashes_path << endl << endl;
         ifstream hashes_file;
-        loadFile(hashes_file, hashes_path);
+        
+        // If file is not loaded, print error message to user and stop execution
+        if(!loadFile(hashes_file, hashes_path)) {
+            std::cerr << "Unable to load hashes file specified." << endl
+                      << hashes_path << endl;
+            return 1;
+        }
 
         // Read hashes from file and store in unordered map
         storeHashes(hashes_file, hashes);
@@ -168,16 +202,22 @@ int main(int argc, char *argv[]) {
         // Calculate time taken and print
         auto time_taken = duration_cast<milliseconds>(end - start).count();
         cout << endl << "Cracking took " << time_taken << " ms." << endl;
-    } else { // If no arguments are specified, display welcome / help message
+    }
+    else { // If no arguments are specified, display welcome / help message
         cout << "This is a linux based multi-threaded password cracking tool. \n"
              << "It supports MD5, SHA1 & SHA256 hashes. \n"
              << "Created By: Cameron McCallion. \n\n"
              << "Flags:\n\t"
-             << "-d : Dictionary File\n\t"
-             << "-h : Hashes File\n\t"
+             << "-d : Dictionary File (Mandatory)\n\t"
+             << "-h : Hashes File (Mandatory)\n\t"
              << "-t : Hash Type (Optional, Default: MD5, Accepts: MD5, SHA1 & SHA256)\n\t"
              << "-o : Output File (Optional, Default: ./cracked.txt)\n\n"
-             << "Example:\n\t"
-             << "./pwCrack -d /usr/share/dict/words -h hashes/md5.txt -t MD5 -o crackedMD5.txt" << endl;
+             << "Examples:\n\t"
+             << "./pwCrack -d /usr/share/dict/words -h hashes/md5.txt -t MD5 -o crackedMD5.txt\n\t"
+             << "./pwCrack -d /usr/share/dict/words -h hashes/sha256.txt -t SHA256\n\t"
+             << "./pwCrack -d /usr/share/dict/words -h hashes/md5.txt" << endl;
+             
     }
+
+    return 0;
 }
