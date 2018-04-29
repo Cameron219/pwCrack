@@ -220,7 +220,7 @@ int main(int argc, char *argv[]) {
              << "Examples:\n\t"
              << "./pwCrack -d /usr/share/dict/words -h hashes/md5.txt -t MD5 -o crackedMD5.txt\n\t"
              << "./pwCrack -d /usr/share/dict/words -h hashes/sha256.txt -t SHA256\n\t"
-             << "./pwCrack -d /usr/share/dict/words -h hashes/md5.txt" << endl;
+             << "./pwCrack -d dict/wordlist.txt -h hashes/md5.txt" << endl;
              
     }
 
