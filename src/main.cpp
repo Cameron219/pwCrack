@@ -196,12 +196,17 @@ int main(int argc, char *argv[]) {
         // Close dictionary file, as no longer needed.
         dictionary_file.close();
 
-        // Print output path
-        cout << endl << "Finished. Outputted to: " << output_path << endl;
+        if(hashes.getNumCracked() > 0) {
+            // Print output path
+            cout << endl << "Finished. Cracked " << hashes.getNumCracked() << "/" << hashes.getTotalHashes() << " hashes." << endl;
+            cout << "Outputted to: " << output_path << endl;
 
-        // Calculate time taken and print
-        auto time_taken = duration_cast<milliseconds>(end - start).count();
-        cout << endl << "Cracking took " << time_taken << " ms." << endl;
+            // Calculate time taken and print
+            auto time_taken = duration_cast<milliseconds>(end - start).count();
+            cout << endl << "Cracking took " << time_taken << " ms." << endl;
+        } else {
+            cout << endl << "Finished. No hashes were cracked." << endl;
+        }
     }
     else { // If no arguments are specified, display welcome / help message
         cout << "This is a linux based multi-threaded password cracking tool. \n"

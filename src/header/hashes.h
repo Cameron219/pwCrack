@@ -26,6 +26,11 @@ public:
     // Set the dictionary file path
     void setDictionaryPath(std::string&);
 
+    // Get number of hashes cracked
+    int getNumCracked();
+    // Get number of total hashes
+    int getTotalHashes();
+
     // Check if all hashes are cracked
     bool areCracked();
     // Find a hash within map, return true if found, false otherwise

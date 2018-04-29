@@ -31,6 +31,22 @@ bool Hashes::areCracked() {
 }
 
 /**
+ * Get the number of hashes cracked
+ */
+int Hashes::getNumCracked() {
+    std::shared_lock<std::shared_timed_mutex> lock(mutex_);
+    return numCracked;
+}
+
+/**
+ * Get the total number of hashes
+ */
+int Hashes::getTotalHashes() {
+    std::shared_lock<std::shared_timed_mutex> lock(mutex_);
+    return numOfHashes;
+}
+
+/**
  * Checks to see if a hash can be found within the map.
  * Returns true if found, false otherwise.
  */
