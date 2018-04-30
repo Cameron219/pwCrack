@@ -204,7 +204,12 @@ int main(int argc, char *argv[]) {
 
             // Calculate time taken and print
             auto time_taken = duration_cast<milliseconds>(end - start).count();
-            cout << endl << "Cracking took " << time_taken << " ms." << endl;
+            if(time_taken > 1000) {
+                int seconds = time_taken / 1000;
+                cout << endl << "Cracking took " << seconds << " seconds (" << time_taken << " ms)" << endl;
+            } else {
+                cout << endl << "Cracking took " << time_taken << " ms." << endl;
+            }
         } else {
             cout << endl << "Finished. No hashes were cracked." << endl;
         }
