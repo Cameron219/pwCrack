@@ -27,3 +27,10 @@ std::string Channel::read() {
 
     return s;
 }
+
+/**
+ * Return true if buffer is empty, false otherwise
+ */
+bool Channel::isBufferEmpty() {
+    return buffer.empty();
+}

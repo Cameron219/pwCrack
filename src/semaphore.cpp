@@ -2,6 +2,7 @@
 
 /**
  * Increment the counter
+ * Notify wait
  */
 void Semaphore::signal() {
     std::unique_lock<std::mutex> lock(mutex_);

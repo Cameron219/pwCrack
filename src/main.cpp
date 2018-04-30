@@ -1,17 +1,18 @@
 /*
     This is a linux based multi-threaded password cracking tool.
-    It supports MD5, SHA1 & SHA256 password cracking.
+    It supports MD5, SHA1 & SHA256 hashes.
+    Created By: Cameron McCallion.
+    
     Flags:
-        -d : Dictionary File
-        -h : Hashes File
+        -d : Dictionary File (Mandatory)
+        -h : Hashes File (Mandatory)
         -t : Hash Type (Optional, Default: MD5, Accepts: MD5, SHA1 & SHA256)
-        -o : Output File (Optional, Default: cracked.txt)
+        -o : Output File (Optional, Default: ./cracked.txt)
     
-    Example:
+    Examples:
         ./pwCrack -d /usr/share/dict/words -h hashes/md5.txt -t MD5 -o crackedMD5.txt
-
-    
-    Author: Cameron McCallion
+        ./pwCrack -d /usr/share/dict/words -h hashes/sha256.txt -t SHA256
+        ./pwCrack -d dict/wordlist.txt -h hashes/md5.txt
 */
 
 // Include necessary header files

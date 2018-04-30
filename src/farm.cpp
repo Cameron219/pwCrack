@@ -30,6 +30,30 @@ void Farm::run(Hashes &hashes) {
     int threadsFinished = 0;
     thread *threads[threadCount];
 
+    // Thread that listens for output from the other threads
+    thread outputThread = thread([&] {
+        ofstream outputFile;
+        outputFile.open(hashes.getOutputPath(), std::ofstream::out | std::ofstream::app);
+        // Display what dictionary was used
+        outputFile << "----- " << hashes.getDictionaryPath() << " -----" << std::endl;
+
+        // While there are still worker threads running or there are strings in the buffer to be read
+        while(threadCount > threadsFinished || !hashes.isWriteBufferEmpty()) {
+            // Read from worker threads write calls
+            string s = hashes.read();
+
+            // If empty write is passed
+            if(s.empty()) continue;
+            // Output hash : pass to file
+            outputFile << s << std::endl;
+            // Print hash : pass to terminal
+            std::cout << s << std::endl;
+        }
+
+        outputFile << std::endl;
+        return;
+    });
+
     for(int i = 0; i < threadCount; i++) {
         // Create new worker thread
         threads[i] = new thread([&] {
@@ -58,29 +82,6 @@ void Farm::run(Hashes &hashes) {
             }
         });
     }
-
-    // Thread that listens for output from the other threads
-    thread outputThread = thread([&] {
-        ofstream outputFile;
-        outputFile.open(hashes.getOutputPath(), std::ofstream::out | std::ofstream::app);
-        // Display what dictionary was used
-        outputFile << "----- " << hashes.getDictionaryPath() << " -----" << std::endl;
-
-        // While there are still worker threads running
-        while(threadCount > threadsFinished) {
-            // Read from worker threads write calls
-            string s = hashes.read();
-            // If empty write is passed
-            if(s.empty()) continue;
-            // Output hash : pass to console
-            std::cout << s << std::endl;
-            // Output hash : pass to file
-            outputFile << s << std::endl;
-        }
-
-        outputFile << std::endl;
-        return;
-    });
 
     // Join threads
     for(int i = 0; i < threadCount; i++) {

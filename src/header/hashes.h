@@ -35,6 +35,8 @@ public:
     bool areCracked();
     // Find a hash within map, return true if found, false otherwise
     bool find(std::string&);
+
+    bool isWriteBufferEmpty();
     
     // Read from channel
     std::string read();

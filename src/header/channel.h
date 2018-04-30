@@ -17,6 +17,8 @@ public:
     void write(std::string);
     // Read data from buffer
     std::string read();
+    // Check if buffer.empty() == true
+    bool isBufferEmpty();
 
 private:
     // Buffer of strings to be outputted

@@ -85,6 +85,14 @@ void Hashes::write(string s) {
 }
 
 /**
+ * Check to see if the write buffer in channel is empty
+ * Used as part of exit condition in output thread
+ */
+bool Hashes::isWriteBufferEmpty(){
+    return channel.isBufferEmpty();
+}
+
+/**
  * Set the output file path
  * &path: Path to file
  */
